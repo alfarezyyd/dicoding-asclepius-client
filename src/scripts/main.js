@@ -103,13 +103,16 @@ async function uploadFile(formData) {
     showElement(loadingPredict);
 
     const response = await PredictAPI.predict(formData);
-
-    showPredictionResult(response);
-    showElement(result);
+    console.log(response.ok)
+    console.log(response)
+    if (response['status'] === 'success') {
+      showPredictionResult(response);
+      showElement(result);
+    }
   } catch (error) {
     console.error(error);
-
     predictionError.textContent = error.message;
+    showElement(predictionError);
   } finally {
     hideElement(loadingPredict);
   }
@@ -117,7 +120,7 @@ async function uploadFile(formData) {
 
 // Show result to user
 function showPredictionResult(response) {
-  const { message, data } = response;
+  const {message, data} = response;
 
   result.innerHTML = `
     <div class="response-message">
